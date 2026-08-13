@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Lesson = {
   year: string;
@@ -94,6 +94,62 @@ const quiz = [
   { question: "Peristiwa yang menandai berakhirnya Hindia Belanda adalah ...", options: ["VOC didirikan", "Proklamasi Kemerdekaan", "Perjanjian Kalijati", "Sumpah Pemuda"], answer: 2, note: "Pada 8 Maret 1942, Belanda menyerah tanpa syarat kepada Jepang melalui Perjanjian Kalijati." },
 ];
 
+type TitleSegment = { text: string; accent?: boolean };
+
+function TypewriterTitle({ segments, speed = 34 }: { segments: TitleSegment[]; speed?: number }) {
+  const fullText = segments.map((segment) => segment.text).join("");
+  const [visible, setVisible] = useState(0);
+  const rootRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    setVisible(0);
+    const root = rootRef.current;
+    if (!root) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setVisible(fullText.length);
+      return;
+    }
+
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || timer) return;
+      let next = 0;
+      timer = setInterval(() => {
+        next += 1;
+        setVisible(next);
+        if (next >= fullText.length && timer) clearInterval(timer);
+      }, speed);
+      observer.disconnect();
+    }, { threshold: 0.35 });
+
+    observer.observe(root);
+    return () => {
+      observer.disconnect();
+      if (timer) clearInterval(timer);
+    };
+  }, [fullText, speed]);
+
+  function renderSegments(limit: number, reserve = false) {
+    let used = 0;
+    return segments.map((segment, index) => {
+      const amount = Math.max(0, Math.min(segment.text.length, limit - used));
+      used += segment.text.length;
+      return (
+        <span className={segment.accent ? "typewriter-accent" : undefined} key={`${segment.text}-${index}`}>
+          {reserve ? segment.text : segment.text.slice(0, amount)}
+        </span>
+      );
+    });
+  }
+
+  return (
+    <span className="typewriter-shell" ref={rootRef} aria-label={fullText.replaceAll("\n", " ")}>
+      <span className="typewriter-reserve" aria-hidden="true">{renderSegments(fullText.length, true)}</span>
+      <span className="typewriter-live" aria-hidden="true">{renderSegments(visible)}<i className={visible >= fullText.length ? "typewriter-caret done" : "typewriter-caret"} /></span>
+    </span>
+  );
+}
+
 export default function Home() {
   const [slide, setSlide] = useState(0);
   const [quizIndex, setQuizIndex] = useState(0);
@@ -125,7 +181,7 @@ export default function Home() {
       <section id="beranda" className="hero grid-paper">
         <div className="hero-copy">
           <p className="kicker"><span className="dot" /> KELAS SEJARAH INDONESIA</p>
-          <h1>HINDIA<br/><em>BELANDA</em></h1>
+          <h1><TypewriterTitle segments={[{ text: "HINDIA\n" }, { text: "BELANDA", accent: true }]} speed={55} /></h1>
           <p className="hero-lede">Dari rempah-rempah, monopoli, hingga perlawanan rakyat. Pelajari satu bab demi satu bab, lalu uji ingatanmu.</p>
           <div className="hero-actions"><a href="#materi" className="button yellow">MULAI BELAJAR <span>→</span></a><a href="#timeline" className="button white">LIHAT TIMELINE</a></div>
           <div className="hero-stats"><div><b>1596</b><span>Belanda tiba</span></div><div><b>1942</b><span>Hindia Belanda berakhir</span></div><div><b>7</b><span>Bab pembelajaran</span></div></div>
@@ -134,27 +190,27 @@ export default function Home() {
       </section>
 
       <section id="timeline" className="timeline-wrap">
-        <div className="section-title"><p>Garis besar</p><h2>JEJAK WAKTU</h2></div>
+        <div className="section-title"><p>Garis besar</p><h2><TypewriterTitle segments={[{ text: "JEJAK WAKTU" }]} /></h2></div>
         <div className="timeline">{["1596 Datang", "1602 VOC", "1799 VOC bubar", "1830 Tanam Paksa", "1901 Politik Etis", "1942 Kalijati", "1945 Merdeka"].map((item, index) => <div key={item} className="time-node"><i>{index + 1}</i><span>{item}</span></div>)}</div>
       </section>
 
       <section id="materi" className="learning-section">
-        <div className="section-title"><p>Materi per slide</p><h2>BONGKAR CERITANYA</h2><span>Klik panah atau kartu bab untuk menjelajah.</span></div>
+        <div className="section-title"><p>Materi per slide</p><h2><TypewriterTitle segments={[{ text: "BONGKAR CERITANYA" }]} /></h2><span>Klik panah atau kartu bab untuk menjelajah.</span></div>
         <div className="lesson-tabs" role="tablist">{lessons.map((item, index) => <button key={item.year} className={index === slide ? "tab active" : "tab"} onClick={() => setSlide(index)}><b>0{index + 1}</b><span>{item.year}</span></button>)}</div>
-        <article className="lesson-card" style={{ "--accent": lesson.accent } as React.CSSProperties}>
+        <article className="lesson-card" key={lesson.title} style={{ "--accent": lesson.accent } as React.CSSProperties}>
           <div className="lesson-media"><img src={lesson.image} alt={lesson.alt}/><div className="media-year">{lesson.year}</div></div>
-          <div className="lesson-content"><p className="lesson-eyebrow">{lesson.eyebrow}</p><h3>{lesson.title}</h3><p>{lesson.text}</p><ul>{lesson.facts.map((fact) => <li key={fact}>{fact}</li>)}</ul><div className="lesson-controls"><button aria-label="Materi sebelumnya" onClick={() => setSlide((slide + lessons.length - 1) % lessons.length)}>←</button><span>{String(slide + 1).padStart(2, "0")} / {String(lessons.length).padStart(2, "0")}</span><button aria-label="Materi berikutnya" onClick={() => setSlide((slide + 1) % lessons.length)}>→</button></div></div>
+          <div className="lesson-content"><p className="lesson-eyebrow">{lesson.eyebrow}</p><h3><TypewriterTitle segments={[{ text: lesson.title }]} speed={24} /></h3><p>{lesson.text}</p><ul>{lesson.facts.map((fact) => <li key={fact}>{fact}</li>)}</ul><div className="lesson-controls"><button aria-label="Materi sebelumnya" onClick={() => setSlide((slide + lessons.length - 1) % lessons.length)}>←</button><span>{String(slide + 1).padStart(2, "0")} / {String(lessons.length).padStart(2, "0")}</span><button aria-label="Materi berikutnya" onClick={() => setSlide((slide + 1) % lessons.length)}>→</button></div></div>
         </article>
         <div className="progress" aria-label={`${progress}% materi terbuka`}><span style={{ width: `${progress}%` }}/></div>
       </section>
 
       <section id="perlawanan" className="resistance">
         <div className="resistance-image"><img src="/assets/hindia/page-4-1.png" alt="Para tokoh perlawanan Indonesia"/></div>
-        <div className="resistance-copy"><p className="kicker">✦ PERLAWANAN RAKYAT</p><h2>TIDAK<br/><em>TINGGAL DIAM.</em></h2><p>Penjajahan menghadapi perlawanan dari Maluku sampai Aceh, dari Jawa sampai Tanah Batak dan Bali. Setiap perjuangan membawa cerita keberanian yang berbeda.</p><div className="resistance-list"><span>Pattimura <b>1817</b></span><span>Imam Bonjol <b>1803-1837</b></span><span>Diponegoro <b>1825-1830</b></span><span>Antasari <b>1859-1905</b></span><span>Aceh <b>1873-1904</b></span><span>Sisingamangaraja XII <b>1878-1907</b></span></div></div>
+        <div className="resistance-copy"><p className="kicker">✦ PERLAWANAN RAKYAT</p><h2><TypewriterTitle segments={[{ text: "TIDAK\n" }, { text: "TINGGAL DIAM.", accent: true }]} /></h2><p>Penjajahan menghadapi perlawanan dari Maluku sampai Aceh, dari Jawa sampai Tanah Batak dan Bali. Setiap perjuangan membawa cerita keberanian yang berbeda.</p><div className="resistance-list"><span>Pattimura <b>1817</b></span><span>Imam Bonjol <b>1803-1837</b></span><span>Diponegoro <b>1825-1830</b></span><span>Antasari <b>1859-1905</b></span><span>Aceh <b>1873-1904</b></span><span>Sisingamangaraja XII <b>1878-1907</b></span></div></div>
       </section>
 
       <section id="kuis" className="quiz-section grid-paper">
-        <div className="quiz-top"><div><p className="kicker"><span className="dot" /> ZONA UJI DIRI</p><h2>SIAP<br/><em>BERDUEL?</em></h2></div><div className="score-box"><span>SKOR KAMU</span><b>{score}<small>/{quiz.length}</small></b></div></div>
+        <div className="quiz-top"><div><p className="kicker"><span className="dot" /> ZONA UJI DIRI</p><h2><TypewriterTitle segments={[{ text: "SIAP\n" }, { text: "BERDUEL?", accent: true }]} /></h2></div><div className="score-box"><span>SKOR KAMU</span><b>{score}<small>/{quiz.length}</small></b></div></div>
         {!done ? <div className="quiz-card"><div className="question-count">SOAL {quizIndex + 1} DARI {quiz.length}</div><h3>{quiz[quizIndex].question}</h3><div className="answers">{quiz[quizIndex].options.map((option, index) => { const state = selected === null ? "" : index === quiz[quizIndex].answer ? "correct" : index === selected ? "wrong" : "muted"; return <button className={`answer ${state}`} key={option} onClick={() => pick(index)}><b>{String.fromCharCode(65 + index)}</b>{option}</button>; })}</div>{selected !== null && <div className="feedback"><p>{selected === quiz[quizIndex].answer ? "BENAR! Mantap." : "BELUM TEPAT. Coba ingat lagi."}</p><span>{quiz[quizIndex].note}</span><button className="button yellow" onClick={nextQuestion}>{quizIndex === quiz.length - 1 ? "LIHAT HASIL" : "SOAL SELANJUTNYA"} →</button></div>}</div> : <div className="quiz-card result"><p className="kicker">SELESAI!</p><h3>{score === quiz.length ? "KAMU JAGO SEJARAH!" : score >= 3 ? "KEREN, TERUSKAN!" : "YUK, ULANGI MATERINYA!"}</h3><p>Kamu menjawab benar <b>{score}</b> dari {quiz.length} soal. Kunjungi lagi bab materi untuk menguatkan ingatanmu.</p><button className="button yellow" onClick={restart}>ULANGI KUIS ↻</button></div>}
       </section>
 
