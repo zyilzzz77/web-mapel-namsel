@@ -1,220 +1,116 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState } from "react";
 
-type Lesson = {
+type Question = {
   year: string;
-  eyebrow: string;
-  title: string;
-  text: string;
-  facts: string[];
-  image: string;
-  alt: string;
-  accent: string;
+  topic: string;
+  question: string;
+  options: [string, string, string, string];
+  answer: number;
+  explanation: string;
 };
 
-const lessons: Lesson[] = [
-  {
-    year: "1596",
-    eyebrow: "Bab 01 - Kedatangan",
-    title: "Dari dagang ke penjajahan",
-    text: "Hindia Belanda adalah sebutan bagi wilayah Indonesia ketika berada di bawah kekuasaan kolonial Belanda. Rombongan Cornelis de Houtman tiba di Banten pada 1596 untuk mencari rempah-rempah. Kekayaan Nusantara kemudian mendorong Belanda untuk menguasai perdagangan dan wilayah.",
-    facts: ["Pusat pemerintahan kelak berada di Batavia", "Lada, pala, dan cengkih sangat bernilai di Eropa", "Tujuan awalnya perdagangan, lalu berubah menjadi penguasaan"],
-    image: "/assets/hindia/page-1-1.png",
-    alt: "Ilustrasi kota pelabuhan Batavia pada masa kolonial",
-    accent: "#ffb703",
-  },
-  {
-    year: "1602",
-    eyebrow: "Bab 02 - VOC",
-    title: "Monopoli rempah-rempah",
-    text: "VOC (Vereenigde Oostindische Compagnie) didirikan pada 20 Maret 1602. Dengan Hak Oktroi, VOC dapat memonopoli perdagangan, mencetak uang, membentuk tentara, membangun benteng, membuat perjanjian, bahkan berperang seperti sebuah negara.",
-    facts: ["Hak Oktroi memberi kekuasaan sangat luas", "Rakyat dipaksa menjual hasil bumi kepada VOC", "VOC dibubarkan pada 31 Desember 1799 karena korupsi, kerugian, dan utang"],
-    image: "/assets/hindia/page-1-2.png",
-    alt: "Lambang VOC dan kapal dagang Belanda",
-    accent: "#ff5d8f",
-  },
-  {
-    year: "1808-1811",
-    eyebrow: "Bab 03 - Pemerintahan Kolonial",
-    title: "Hindia Belanda diperintah langsung",
-    text: "Setelah VOC bubar, wilayah dan utangnya diambil alih pemerintah Belanda. Hindia Belanda dipimpin Gubernur Jenderal dari Batavia. Herman Willem Daendels memperkuat pertahanan Jawa dan membangun Jalan Raya Pos Anyer-Panarukan dengan kerja paksa yang menyengsarakan rakyat.",
-    facts: ["Gubernur Jenderal menjadi wakil pemerintah Belanda", "Pajak berat dan kerja paksa membebani masyarakat", "1811-1816 wilayah ini sempat dikuasai Inggris di bawah Raffles"],
-    image: "/assets/hindia/page-2-1.png",
-    alt: "Daendels dan gambaran kerja paksa pada masa kolonial",
-    accent: "#5f8dff",
-  },
-  {
-    year: "1830",
-    eyebrow: "Bab 04 - Tanam Paksa",
-    title: "Tanah rakyat, untung untuk Belanda",
-    text: "Johannes van den Bosch menerapkan Cultuurstelsel atau Sistem Tanam Paksa untuk mengisi kas Belanda. Rakyat wajib menyediakan tanah untuk tanaman ekspor seperti kopi, tebu, teh, tembakau, dan nila; hasilnya diserahkan kepada pemerintah kolonial.",
-    facts: ["Tanam Paksa memicu kelaparan dan kemiskinan di banyak daerah", "Sejak 1870, Politik Liberal memberi ruang bagi perkebunan swasta", "Upah rendah dan kehilangan tanah tetap menjadi masalah rakyat"],
-    image: "/assets/hindia/page-2-2.png",
-    alt: "Pekerja di perkebunan kopi pada masa kolonial",
-    accent: "#ff7a00",
-  },
-  {
-    year: "1901",
-    eyebrow: "Bab 05 - Politik Etis",
-    title: "Balas budi yang membuka kesadaran",
-    text: "Politik Etis lahir dari gagasan Conrad Theodor van Deventer tentang utang kehormatan Belanda. Programnya dikenal sebagai Trias van Deventer: edukasi, irigasi, dan transmigrasi. Pelaksanaannya belum sepenuhnya menyejahterakan rakyat, tetapi pendidikan melahirkan kaum terpelajar dan pergerakan nasional.",
-    facts: ["Edukasi: perluasan pendidikan", "Irigasi: pembangunan saluran air pertanian", "Transmigrasi: pemindahan penduduk dari daerah padat"],
-    image: "/assets/hindia/page-3-1.png",
-    alt: "Murid dan guru pada era politik etis",
-    accent: "#25b58b",
-  },
-  {
-    year: "1803-1907",
-    eyebrow: "Bab 06 - Perlawanan",
-    title: "Melawan dari banyak penjuru",
-    text: "Tekanan pajak, monopoli, kerja paksa, dan campur tangan Belanda mendorong perlawanan di berbagai daerah. Perlawanan yang awalnya bersifat kedaerahan secara perlahan menumbuhkan semangat persatuan dan nasionalisme Indonesia.",
-    facts: ["Pattimura - Maluku (1817)", "Tuanku Imam Bonjol - Perang Padri, Sumatra Barat (1803-1837)", "Pangeran Diponegoro - Jawa (1825-1830)", "Pangeran Antasari - Perang Banjar (1859-1905)", "Teuku Umar, Cut Nyak Dhien, Panglima Polim - Perang Aceh (1873-1904)", "Sisingamangaraja XII - Sumatra Utara (1878-1907); Bali juga melawan lewat Puputan"],
-    image: "/assets/hindia/page-4-1.png",
-    alt: "Kolase para tokoh perlawanan terhadap Belanda",
-    accent: "#9b5de5",
-  },
-  {
-    year: "8 Maret 1942",
-    eyebrow: "Bab 07 - Akhir Hindia Belanda",
-    title: "Menyerah di Kalijati",
-    text: "Ketika Perang Dunia II berlangsung, Jepang menyerang Hindia Belanda. Belanda menyerah tanpa syarat kepada Jepang melalui Perjanjian Kalijati di Subang pada 8 Maret 1942. Masa Hindia Belanda pun berakhir dan digantikan pendudukan Jepang hingga 1945.",
-    facts: ["Belanda menyerah kepada Jepang di Kalijati, Subang", "Pendudukan Jepang berlangsung sekitar tiga setengah tahun", "17 Agustus 1945: Indonesia memproklamasikan kemerdekaan"],
-    image: "/assets/hindia/page-5-1.png",
-    alt: "Penyerahan Belanda kepada Jepang pada masa Perang Dunia II",
-    accent: "#ef476f",
-  },
+const questions: Question[] = [
+  { year: "1901", topic: "Politik Etis", question: "Program Politik Etis yang ikut membuka jalan bagi lahirnya kaum terpelajar adalah …", options: ["Monopoli dagang", "Pendidikan", "Kerja paksa", "Tanam paksa"], answer: 1, explanation: "Pendidikan memberi kesempatan bagi sebagian penduduk bumiputra untuk belajar. Dari kalangan terpelajar ini tumbuh banyak gagasan pergerakan." },
+  { year: "1908", topic: "Budi Utomo", question: "Organisasi apa yang berdiri pada 20 Mei 1908 dan diperingati sebagai tonggak Kebangkitan Nasional?", options: ["Budi Utomo", "Sarekat Islam", "Indische Partij", "PNI"], answer: 0, explanation: "Budi Utomo lahir pada 20 Mei 1908 melalui para pelajar STOVIA. Tanggal ini kemudian diperingati sebagai Hari Kebangkitan Nasional." },
+  { year: "1912", topic: "Sarekat Islam", question: "Sarekat Islam berkembang dari perkumpulan yang mula-mula menghimpun para …", options: ["Petani tebu", "Pedagang batik", "Pegawai negeri", "Pelaut"], answer: 1, explanation: "Cikal bakal Sarekat Islam ialah Sarekat Dagang Islam, yang menghimpun pedagang muslim, terutama dalam perdagangan batik." },
+  { year: "1912", topic: "Indische Partij", question: "Kelompok tokoh pendiri Indische Partij dikenal dengan sebutan …", options: ["Empat Serangkai", "Tiga Serangkai", "Panitia Sembilan", "Angkatan 45"], answer: 1, explanation: "Tiga Serangkai adalah Douwes Dekker, Tjipto Mangoenkoesoemo, dan Soewardi Soerjaningrat." },
+  { year: "1912", topic: "Muhammadiyah", question: "Siapa pendiri Muhammadiyah di Yogyakarta?", options: ["K.H. Ahmad Dahlan", "H.O.S. Tjokroaminoto", "W.R. Soepratman", "Mohammad Hatta"], answer: 0, explanation: "K.H. Ahmad Dahlan mendirikan Muhammadiyah pada 1912. Organisasi ini bergerak dalam pendidikan, pelayanan sosial, dan pembaruan Islam." },
+  { year: "1922", topic: "Taman Siswa", question: "Tokoh yang mendirikan perguruan Taman Siswa adalah …", options: ["Sutan Sjahrir", "Ki Hajar Dewantara", "Soekarno", "Dr. Soetomo"], answer: 1, explanation: "Ki Hajar Dewantara mendirikan Taman Siswa pada 1922 untuk memajukan pendidikan bangsa." },
+  { year: "1927", topic: "PNI", question: "Partai Nasional Indonesia (PNI) yang berdiri pada 1927 erat kaitannya dengan tokoh …", options: ["Soekarno", "Pattimura", "Pangeran Diponegoro", "Cornelis de Houtman"], answer: 0, explanation: "Soekarno merupakan tokoh utama pendirian PNI pada 1927. Organisasi ini memperjuangkan kemerdekaan Indonesia." },
+  { year: "1928", topic: "Sumpah Pemuda", question: "Sumpah Pemuda dihasilkan dalam peristiwa …", options: ["Kongres Pemuda II", "Kongres Budi Utomo I", "Sidang BPUPKI", "Konferensi Meja Bundar"], answer: 0, explanation: "Kongres Pemuda II berlangsung pada 27–28 Oktober 1928 dan melahirkan ikrar Sumpah Pemuda." },
+  { year: "1928", topic: "Persatuan", question: "Bahasa yang dijunjung sebagai bahasa persatuan dalam Sumpah Pemuda adalah …", options: ["Bahasa Jawa", "Bahasa Melayu", "Bahasa Indonesia", "Bahasa Belanda"], answer: 2, explanation: "Salah satu isi ikrar Sumpah Pemuda ialah menjunjung bahasa persatuan, bahasa Indonesia." },
+  { year: "1928", topic: "Indonesia Raya", question: "Siapa pencipta lagu Indonesia Raya yang diperdengarkan pada Kongres Pemuda II?", options: ["Ismail Marzuki", "W.R. Soepratman", "C. Simanjuntak", "Kusbini"], answer: 1, explanation: "W.R. Soepratman memperdengarkan Indonesia Raya dengan biola pada Kongres Pemuda II tahun 1928." },
 ];
 
-const quiz = [
-  { question: "Siapa pemimpin rombongan Belanda yang tiba di Banten pada 1596?", options: ["Cornelis de Houtman", "Jan Pieterszoon Coen", "Herman Willem Daendels", "Thomas Stamford Raffles"], answer: 0, note: "Cornelis de Houtman memimpin pelayaran Belanda pertama ke Banten pada 1596." },
-  { question: "Hak istimewa VOC yang membuatnya bertindak layaknya negara disebut ...", options: ["Politik Etis", "Hak Oktroi", "Tanam Paksa", "Politik Liberal"], answer: 1, note: "Hak Oktroi memberi VOC hak monopoli, membentuk tentara, berperang, serta membuat perjanjian." },
-  { question: "Sistem Tanam Paksa mulai diterapkan pada tahun ...", options: ["1799", "1816", "1830", "1901"], answer: 2, note: "Cultuurstelsel diterapkan oleh Johannes van den Bosch pada 1830." },
-  { question: "Tokoh yang memimpin Perang Diponegoro adalah ...", options: ["Pattimura", "Pangeran Diponegoro", "Pangeran Antasari", "Sisingamangaraja XII"], answer: 1, note: "Perang Diponegoro berlangsung di Jawa pada 1825-1830." },
-  { question: "Peristiwa yang menandai berakhirnya Hindia Belanda adalah ...", options: ["VOC didirikan", "Proklamasi Kemerdekaan", "Perjanjian Kalijati", "Sumpah Pemuda"], answer: 2, note: "Pada 8 Maret 1942, Belanda menyerah tanpa syarat kepada Jepang melalui Perjanjian Kalijati." },
-];
-
-type TitleSegment = { text: string; accent?: boolean };
-
-function TypewriterTitle({ segments, speed = 34 }: { segments: TitleSegment[]; speed?: number }) {
-  const fullText = segments.map((segment) => segment.text).join("");
-  const [visible, setVisible] = useState(0);
-  const rootRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    setVisible(0);
-    const root = rootRef.current;
-    if (!root) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setVisible(fullText.length);
-      return;
-    }
-
-    let timer: ReturnType<typeof setInterval> | undefined;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting || timer) return;
-      let next = 0;
-      timer = setInterval(() => {
-        next += 1;
-        setVisible(next);
-        if (next >= fullText.length && timer) clearInterval(timer);
-      }, speed);
-      observer.disconnect();
-    }, { threshold: 0.35 });
-
-    observer.observe(root);
-    return () => {
-      observer.disconnect();
-      if (timer) clearInterval(timer);
-    };
-  }, [fullText, speed]);
-
-  function renderSegments(limit: number, reserve = false) {
-    let used = 0;
-    return segments.map((segment, index) => {
-      const amount = Math.max(0, Math.min(segment.text.length, limit - used));
-      used += segment.text.length;
-      return (
-        <span className={segment.accent ? "typewriter-accent" : undefined} key={`${segment.text}-${index}`}>
-          {reserve ? segment.text : segment.text.slice(0, amount)}
-        </span>
-      );
-    });
-  }
-
-  return (
-    <span className="typewriter-shell" ref={rootRef} aria-label={fullText.replaceAll("\n", " ")}>
-      <span className="typewriter-reserve" aria-hidden="true">{renderSegments(fullText.length, true)}</span>
-      <span className="typewriter-live" aria-hidden="true">{renderSegments(visible)}<i className={visible >= fullText.length ? "typewriter-caret done" : "typewriter-caret"} /></span>
-    </span>
-  );
-}
+const letters = ["A", "B", "C", "D"];
 
 export default function Home() {
-  const [slide, setSlide] = useState(0);
-  const [quizIndex, setQuizIndex] = useState(0);
+  const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
-  const [done, setDone] = useState(false);
-  const lesson = lessons[slide];
-  const progress = useMemo(() => Math.round(((slide + 1) / lessons.length) * 100), [slide]);
+  const [finished, setFinished] = useState(false);
+  const current = questions[index];
 
-  function pick(option: number) {
-    if (selected !== null || done) return;
+  function choose(option: number) {
+    if (selected !== null) return;
     setSelected(option);
-    if (option === quiz[quizIndex].answer) setScore((value) => value + 1);
+    if (option === current.answer) setScore((value) => value + 1);
   }
-  function nextQuestion() {
-    if (quizIndex === quiz.length - 1) { setDone(true); return; }
-    setQuizIndex((value) => value + 1); setSelected(null);
+
+  function next() {
+    if (index === questions.length - 1) {
+      setFinished(true);
+    } else {
+      setIndex((value) => value + 1);
+      setSelected(null);
+    }
   }
-  function restart() { setQuizIndex(0); setSelected(null); setScore(0); setDone(false); }
+
+  function restart() {
+    setIndex(0);
+    setSelected(null);
+    setScore(0);
+    setFinished(false);
+  }
 
   return (
-    <main>
-      <nav className="nav">
-        <a className="brand" href="#beranda"><span>SEJARAH</span><b>+</b></a>
-        <div className="nav-links"><a href="#materi">Materi</a><a href="#perlawanan">Perlawanan</a><a href="#kuis">Kuis</a></div>
-        <a className="nav-cta" href="#kuis">UJI DIRI ↗</a>
-      </nav>
-
-      <section id="beranda" className="hero grid-paper">
-        <div className="hero-copy">
-          <p className="kicker"><span className="dot" /> KELAS SEJARAH INDONESIA</p>
-          <h1><TypewriterTitle segments={[{ text: "HINDIA\n" }, { text: "BELANDA", accent: true }]} speed={55} /></h1>
-          <p className="hero-lede">Dari rempah-rempah, monopoli, hingga perlawanan rakyat. Pelajari satu bab demi satu bab, lalu uji ingatanmu.</p>
-          <div className="hero-actions"><a href="#materi" className="button yellow">MULAI BELAJAR <span>→</span></a><a href="#timeline" className="button white">LIHAT TIMELINE</a></div>
-          <div className="hero-stats"><div><b>1596</b><span>Belanda tiba</span></div><div><b>1942</b><span>Hindia Belanda berakhir</span></div><div><b>7</b><span>Bab pembelajaran</span></div></div>
-        </div>
-        <div className="hero-art"><div className="sticker sticker-top">REMEMBER<br/>THE PEOPLE!</div><img src="/assets/hindia/page-1-1.png" alt="Pelabuhan Batavia"/><div className="burst">✦</div><p className="caption">BATAVIA, PUSAT KEKUASAAN KOLONIAL</p></div>
-      </section>
-
-      <section id="timeline" className="timeline-wrap">
-        <div className="section-title"><p>Garis besar</p><h2><TypewriterTitle segments={[{ text: "JEJAK WAKTU" }]} /></h2></div>
-        <div className="timeline">{["1596 Datang", "1602 VOC", "1799 VOC bubar", "1830 Tanam Paksa", "1901 Politik Etis", "1942 Kalijati", "1945 Merdeka"].map((item, index) => <div key={item} className="time-node"><i>{index + 1}</i><span>{item}</span></div>)}</div>
-      </section>
-
-      <section id="materi" className="learning-section">
-        <div className="section-title"><p>Materi per slide</p><h2><TypewriterTitle segments={[{ text: "BONGKAR CERITANYA" }]} /></h2><span>Klik panah atau kartu bab untuk menjelajah.</span></div>
-        <div className="lesson-tabs" role="tablist">{lessons.map((item, index) => <button key={item.year} className={index === slide ? "tab active" : "tab"} onClick={() => setSlide(index)}><b>0{index + 1}</b><span>{item.year}</span></button>)}</div>
-        <article className="lesson-card" key={lesson.title} style={{ "--accent": lesson.accent } as React.CSSProperties}>
-          <div className="lesson-media"><img src={lesson.image} alt={lesson.alt}/><div className="media-year">{lesson.year}</div></div>
-          <div className="lesson-content"><p className="lesson-eyebrow">{lesson.eyebrow}</p><h3><TypewriterTitle segments={[{ text: lesson.title }]} speed={24} /></h3><p>{lesson.text}</p><ul>{lesson.facts.map((fact) => <li key={fact}>{fact}</li>)}</ul><div className="lesson-controls"><button aria-label="Materi sebelumnya" onClick={() => setSlide((slide + lessons.length - 1) % lessons.length)}>←</button><span>{String(slide + 1).padStart(2, "0")} / {String(lessons.length).padStart(2, "0")}</span><button aria-label="Materi berikutnya" onClick={() => setSlide((slide + 1) % lessons.length)}>→</button></div></div>
-        </article>
-        <div className="progress" aria-label={`${progress}% materi terbuka`}><span style={{ width: `${progress}%` }}/></div>
-      </section>
-
-      <section id="perlawanan" className="resistance">
-        <div className="resistance-image"><img src="/assets/hindia/page-4-1.png" alt="Para tokoh perlawanan Indonesia"/></div>
-        <div className="resistance-copy"><p className="kicker">✦ PERLAWANAN RAKYAT</p><h2><TypewriterTitle segments={[{ text: "TIDAK\n" }, { text: "TINGGAL DIAM.", accent: true }]} /></h2><p>Penjajahan menghadapi perlawanan dari Maluku sampai Aceh, dari Jawa sampai Tanah Batak dan Bali. Setiap perjuangan membawa cerita keberanian yang berbeda.</p><div className="resistance-list"><span>Pattimura <b>1817</b></span><span>Imam Bonjol <b>1803-1837</b></span><span>Diponegoro <b>1825-1830</b></span><span>Antasari <b>1859-1905</b></span><span>Aceh <b>1873-1904</b></span><span>Sisingamangaraja XII <b>1878-1907</b></span></div></div>
-      </section>
-
-      <section id="kuis" className="quiz-section grid-paper">
-        <div className="quiz-top"><div><p className="kicker"><span className="dot" /> ZONA UJI DIRI</p><h2><TypewriterTitle segments={[{ text: "SIAP\n" }, { text: "BERDUEL?", accent: true }]} /></h2></div><div className="score-box"><span>SKOR KAMU</span><b>{score}<small>/{quiz.length}</small></b></div></div>
-        {!done ? <div className="quiz-card"><div className="question-count">SOAL {quizIndex + 1} DARI {quiz.length}</div><h3>{quiz[quizIndex].question}</h3><div className="answers">{quiz[quizIndex].options.map((option, index) => { const state = selected === null ? "" : index === quiz[quizIndex].answer ? "correct" : index === selected ? "wrong" : "muted"; return <button className={`answer ${state}`} key={option} onClick={() => pick(index)}><b>{String.fromCharCode(65 + index)}</b>{option}</button>; })}</div>{selected !== null && <div className="feedback"><p>{selected === quiz[quizIndex].answer ? "BENAR! Mantap." : "BELUM TEPAT. Coba ingat lagi."}</p><span>{quiz[quizIndex].note}</span><button className="button yellow" onClick={nextQuestion}>{quizIndex === quiz.length - 1 ? "LIHAT HASIL" : "SOAL SELANJUTNYA"} →</button></div>}</div> : <div className="quiz-card result"><p className="kicker">SELESAI!</p><h3>{score === quiz.length ? "KAMU JAGO SEJARAH!" : score >= 3 ? "KEREN, TERUSKAN!" : "YUK, ULANGI MATERINYA!"}</h3><p>Kamu menjawab benar <b>{score}</b> dari {quiz.length} soal. Kunjungi lagi bab materi untuk menguatkan ingatanmu.</p><button className="button yellow" onClick={restart}>ULANGI KUIS ↻</button></div>}
-      </section>
-
-      <footer><span>SEJARAH+ / HINDIA BELANDA</span><span>DIBUAT UNTUK BELAJAR, MENGINGAT, DAN BERTANYA.</span><a href="#beranda">KE ATAS ↑</a></footer>
+    <main className="site-shell">
+      <header className="topbar">
+        <div className="brand-mark"><span aria-hidden="true">✦</span> Jejak Bangsa</div>
+        <span className="topbar-label">Kuis sejarah Indonesia</span>
+      </header>
+      <div className="page-grid">
+        <aside className="intro-panel">
+          <p className="eyebrow">1900 — 1928</p>
+          <h1>Pergerakan<br/><em>Nasional</em><br/>Indonesia</h1>
+          <p className="intro-copy">Kenali organisasi, tokoh, dan peristiwa yang menumbuhkan semangat persatuan. Jawab 10 soal singkat dan lihat penjelasannya satu per satu.</p>
+          <div className="milestones" aria-label="Garis waktu singkat">
+            <div><strong>1908</strong><span>Budi Utomo</span></div>
+            <div><strong>1912</strong><span>Organisasi berkembang</span></div>
+            <div><strong>1928</strong><span>Sumpah Pemuda</span></div>
+          </div>
+        </aside>
+        <section className="quiz-panel" aria-label="Kuis pergerakan nasional">
+          {!finished ? (
+            <>
+              <div className="quiz-head">
+                <div><span className="small-label">SOAL {String(index + 1).padStart(2, "0")} / {questions.length}</span><span className="topic-tag">{current.topic}</span></div>
+                <span className="live-score">Skor <strong>{score}</strong></span>
+              </div>
+              <div className="progress-track" role="progressbar" aria-label="Kemajuan kuis" aria-valuenow={index + 1} aria-valuemin={1} aria-valuemax={questions.length}><span style={{ width: `${((index + 1) / questions.length) * 100}%` }} /></div>
+              <p className="question-year">{current.year} <span aria-hidden="true">/</span> PILIH SATU JAWABAN</p>
+              <h2>{current.question}</h2>
+              <div className="options">
+                {current.options.map((option, optionIndex) => {
+                  const answered = selected !== null;
+                  const state = answered ? optionIndex === current.answer ? "correct" : optionIndex === selected ? "incorrect" : "dimmed" : "";
+                  return <button key={option} type="button" disabled={answered} className={`option ${state}`} onClick={() => choose(optionIndex)} aria-pressed={selected === optionIndex}><span className="option-letter">{letters[optionIndex]}</span><span>{option}</span></button>;
+                })}
+              </div>
+              {selected !== null && <div className={`answer-note ${selected === current.answer ? "is-correct" : "is-incorrect"}`} role="status"><strong>{selected === current.answer ? "Tepat!" : "Belum tepat."}</strong><p>{current.explanation}</p></div>}
+              <div className="quiz-footer">
+                <span>{selected === null ? "Pilih jawaban untuk melanjutkan." : `Jawaban benar: ${current.options[current.answer]}`}</span>
+                <button type="button" className="next-button" onClick={next} disabled={selected === null}>{index === questions.length - 1 ? "Lihat hasil" : "Soal berikutnya"}<span aria-hidden="true"> →</span></button>
+              </div>
+            </>
+          ) : (
+            <div className="result" role="status">
+              <span className="result-icon" aria-hidden="true">✦</span>
+              <p className="small-label">KUIS SELESAI</p>
+              <h2>{score >= 8 ? "Hebat, kamu paham materinya!" : score >= 5 ? "Bagus, terus pelajari sejarahnya!" : "Ayo coba lagi!"}</h2>
+              <p className="result-score"><strong>{score}</strong> / {questions.length} jawaban benar</p>
+              <p className="result-copy">Setiap soal membantu mengingat perjalanan dari Budi Utomo hingga Sumpah Pemuda.</p>
+              <button type="button" className="next-button" onClick={restart}>Ulangi kuis <span aria-hidden="true">↻</span></button>
+            </div>
+          )}
+        </section>
+      </div>
+      <footer className="site-footer">
+        <span>Jejak Bangsa · Belajar sejarah dengan ringkas</span>
+        <span>Rujukan: <a href="https://kebudayaan.kemdikbud.go.id/Vredeburg/diorama-kongres-pertama-boedi-oetomo-diorama-museum-benteng-vredeburg-yogyakarta/" target="_blank" rel="noreferrer">Budi Utomo</a> · <a href="https://kebudayaan.kemdikbud.go.id/Vredeburg/diorama-berdirinya-tamansiswa-diorama-museum-benteng-vredeburg-yogyakarta/" target="_blank" rel="noreferrer">Taman Siswa</a> · <a href="https://kebudayaan.kemdikbud.go.id/kisah-dibalik-lahirnya-lagu-kebangsaan-indonesia-raya/" target="_blank" rel="noreferrer">Kongres Pemuda II</a></span>
+      </footer>
     </main>
   );
 }

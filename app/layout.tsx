@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sejarah+ | Hindia Belanda",
-  description: "Belajar sejarah Hindia Belanda melalui materi interaktif, perlawanan rakyat, dan kuis.",
+  title: "Jejak Bangsa | Kuis Pergerakan Nasional Indonesia",
+  description: "Kuis sederhana tentang pergerakan nasional Indonesia 1900–1928, dari Budi Utomo hingga Sumpah Pemuda.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
