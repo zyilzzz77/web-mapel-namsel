@@ -1,5 +1,6 @@
 import WordTypewriter from "@/app/components/WordTypewriter";
 import MaterialCard from "@/app/components/MaterialCard";
+import BookFlip from "@/app/components/BookFlip";
 import QuizGame, { type QuizQuestion } from "@/app/components/QuizGame";
 
 const materials = [
@@ -68,11 +69,11 @@ export default function Home() {
           <h2>E-book Pergerakan Nasional Indonesia</h2>
           <p>Buku 15 halaman ini membahas latar belakang pergerakan, organisasi dan tokohnya, peran pemuda dan perempuan, hingga Sumpah Pemuda 1928.</p>
           <div className="ebook-actions">
-            <a className="ebook-button" href="/pergerakan-nasional-1900-1928.pdf" target="_blank" rel="noreferrer">Buka e-book <span aria-hidden="true">↗</span></a>
-            <a className="ebook-download" href="/pergerakan-nasional-1900-1928.pdf" download="Pergerakan Nasional Indonesia (1900-1928).pdf">Unduh PDF</a>
+            <a className="ebook-button" href="/pergerakan-nasional-1900-1928.pdf" download="Pergerakan Nasional Indonesia (1900-1928).pdf">Unduh PDF <span aria-hidden="true">↓</span></a>
+            <a className="ebook-download" href="/pergerakan-nasional-1900-1928.pdf" target="_blank" rel="noreferrer">Buka di tab baru <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <div className="ebook-preview"><iframe src="/pergerakan-nasional-1900-1928.pdf#page=1&view=FitH" title="Pratinjau e-book Pergerakan Nasional Indonesia 1900 sampai 1928" loading="lazy" /></div>
+        <BookFlip />
       </section>
       <div className="page-grid" id="kuis">
         <aside className="intro-panel">
