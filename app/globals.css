@@ -19,10 +19,14 @@ button { font:inherit; cursor:pointer; } a { color:inherit; }
 .learning-heading h1 em { color:var(--red); font-weight:400; }
 .learning-heading>p:last-child { font-size:18px; line-height:1.65; color:#485c6a; max-width:760px; margin:24px 0 0; }
 .material-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:44px; }
-.material-card { padding:26px 27px 30px; background:#fff; border:1px solid var(--line); border-radius:14px; }
-.material-card>span { color:var(--red); font-size:12px; letter-spacing:.12em; font-weight:800; }
-.material-card h2 { font-family:Georgia,'Times New Roman',serif; font-size:27px; font-weight:400; letter-spacing:-.03em; margin:18px 0 12px; }
-.material-card p { font-size:16px; line-height:1.65; color:#435463; margin:0; }
+.material-card { background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; display:flex; flex-direction:column; }
+.material-figure { position:relative; margin:0; aspect-ratio:4/3; background:#e9e4da; }
+.material-figure img { object-fit:cover; transition:transform .55s cubic-bezier(.22,1,.36,1); }
+.material-card:hover .material-figure img { transform:scale(1.045); }
+.material-body { padding:24px 27px 30px; display:flex; flex-direction:column; flex:1; }
+.material-body>span { color:var(--red); font-size:12px; letter-spacing:.12em; font-weight:800; }
+.material-body h2 { font-family:Georgia,'Times New Roman',serif; font-size:27px; font-weight:400; letter-spacing:-.03em; margin:18px 0 12px; }
+.material-body p { font-size:16px; line-height:1.65; color:#435463; margin:0; }
 .ebook-section { background:#e9e4da; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:50px clamp(24px,6vw,88px); display:grid; grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr); gap:50px; align-items:center; }
 .ebook-info { max-width:480px; justify-self:end; }
 .ebook-info .eyebrow { color:var(--red); margin:0 0 18px; }
@@ -83,10 +87,11 @@ button { font:inherit; cursor:pointer; } a { color:inherit; }
 .result-score { font-size:21px; margin:0; }
 .result-score strong { font-family:Georgia,'Times New Roman',serif; font-size:64px; color:var(--red); font-weight:400; line-height:1; }
 .result-copy { font-size:16px; color:#596875; line-height:1.6; max-width:500px; margin:20px 0 28px; }
-.site-footer { border-top:1px solid var(--line); background:#faf8f2; padding:20px clamp(20px,5vw,72px); display:flex; justify-content:space-between; gap:20px; color:#69747c; font-size:12px; line-height:1.5; }
+.site-footer { border-top:1px solid var(--line); background:#faf8f2; padding:20px clamp(20px,5vw,72px); display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px 24px; color:#69747c; font-size:12px; line-height:1.5; }
+.site-footer span { max-width:560px; }
 .site-footer a { text-underline-offset:3px; }
 @media (max-width:900px) { .page-grid { grid-template-columns:1fr; }.intro-panel { border-right:0; padding:42px 26px 34px; }.intro-panel h1 { font-size:clamp(47px,9vw,68px); }.intro-copy { margin-top:20px; }.milestones { padding-top:38px; }.quiz-panel { padding:40px 26px 55px; }.site-footer { flex-direction:column; } }
 @media (max-width:900px) { .material-grid { grid-template-columns:1fr; }.learning-section { padding:50px 26px 55px; }.ebook-section { grid-template-columns:1fr; padding:45px 26px; gap:28px; }.ebook-info { justify-self:start; }.ebook-preview { max-width:none; } }
 @media (max-width:520px) { .topbar { height:64px; }.topbar-label { display:none; }.intro-panel h1 { font-size:48px; }.intro-copy { font-size:16px; }.milestones { gap:9px; }.milestones strong { font-size:22px; }.milestones span { font-size:12px; }.quiz-head { align-items:flex-start; }.quiz-head>div { gap:8px; }.quiz-panel h2 { font-size:30px; }.quiz-footer { flex-direction:column; align-items:stretch; }.next-button { width:100%; }.result { min-height:500px; } }
-@media (max-width:520px) { .topbar-nav { gap:12px; font-size:12px; }.learning-heading>p:last-child { font-size:16px; }.material-card { padding:23px; }.ebook-preview { height:330px; } }
+@media (max-width:520px) { .topbar-nav { gap:12px; font-size:12px; }.learning-heading>p:last-child { font-size:16px; }.material-body { padding:20px 22px 26px; }.ebook-preview { height:330px; } }
 @media (prefers-reduced-motion:reduce) { * { scroll-behavior:auto !important; transition:none !important; } }

@@ -2,6 +2,35 @@
 
 import { useState } from "react";
 import WordTypewriter from "@/app/components/WordTypewriter";
+import MaterialCard from "@/app/components/MaterialCard";
+
+const materials = [
+  {
+    index: "01",
+    label: "LATAR BELAKANG",
+    title: "Kesadaran baru",
+    body: "Perlawanan di berbagai daerah telah berlangsung lama, tetapi sering bergerak sendiri-sendiri. Pada masa Politik Etis, sebagian rakyat mendapat kesempatan belajar. Mereka mulai memakai pendidikan, pers, dan organisasi untuk menyuarakan perubahan. Gagasan nasionalisme dari luar negeri juga ikut memberi pengaruh.",
+    image: "/images/kesadaran-baru.jpg",
+    imageAlt: "Potret siswa School tot Opleiding van Indische Artsen (STOVIA) di Batavia, sekitar 1920-an",
+  },
+  {
+    index: "02",
+    label: "ORGANISASI",
+    title: "Bergerak bersama",
+    body: "Budi Utomo berdiri pada 1908 dan menjadi tonggak Kebangkitan Nasional. Sesudahnya, Sarekat Islam berkembang dari gerakan perdagangan; Indische Partij menyuarakan persatuan dan kemerdekaan; Muhammadiyah serta Taman Siswa memperluas pendidikan. Perhimpunan Indonesia dan PNI juga mempertegas cita-cita kebangsaan.",
+    image: "/images/bergerak-bersama.jpg",
+    imageAlt: "Rapat pembukaan cabang Sarekat Islam di Blitar pada awal abad ke-20",
+  },
+  {
+    index: "03",
+    label: "PUNCAK PERSATUAN",
+    title: "Sumpah Pemuda",
+    body: "Organisasi pemuda dari berbagai daerah mulai mencari titik temu sebagai satu bangsa. Dalam Kongres Pemuda II pada 28 Oktober 1928, mereka menegaskan satu tanah air, satu bangsa, dan menjunjung bahasa persatuan: Indonesia. Ikrar ini menjadi penanda penting tumbuhnya persatuan nasional.",
+    image: "/images/sumpah-pemuda.jpg",
+    imageAlt: "Dokumen Poetoesan Congres Pemoeda-Pemoeda Indonesia, 27-28 Oktober 1928",
+    imagePosition: "top",
+  },
+];
 
 type Question = {
   year: string;
@@ -69,21 +98,9 @@ export default function Home() {
           <p>Pada awal abad ke-20, perjuangan bangsa Indonesia semakin terorganisasi. Pendidikan melahirkan kaum terpelajar, sementara pengalaman hidup di bawah penjajahan mendorong keinginan untuk memperbaiki nasib bersama.</p>
         </div>
         <div className="material-grid">
-          <article className="material-card">
-            <span>01 / LATAR BELAKANG</span>
-            <h2>Kesadaran baru</h2>
-            <p>Perlawanan di berbagai daerah telah berlangsung lama, tetapi sering bergerak sendiri-sendiri. Pada masa Politik Etis, sebagian rakyat mendapat kesempatan belajar. Mereka mulai memakai pendidikan, pers, dan organisasi untuk menyuarakan perubahan. Gagasan nasionalisme dari luar negeri juga ikut memberi pengaruh.</p>
-          </article>
-          <article className="material-card">
-            <span>02 / ORGANISASI</span>
-            <h2>Bergerak bersama</h2>
-            <p>Budi Utomo berdiri pada 1908 dan menjadi tonggak Kebangkitan Nasional. Sesudahnya, Sarekat Islam berkembang dari gerakan perdagangan; Indische Partij menyuarakan persatuan dan kemerdekaan; Muhammadiyah serta Taman Siswa memperluas pendidikan. Perhimpunan Indonesia dan PNI juga mempertegas cita-cita kebangsaan.</p>
-          </article>
-          <article className="material-card">
-            <span>03 / PUNCAK PERSATUAN</span>
-            <h2>Sumpah Pemuda</h2>
-            <p>Organisasi pemuda dari berbagai daerah mulai mencari titik temu sebagai satu bangsa. Dalam Kongres Pemuda II pada 28 Oktober 1928, mereka menegaskan satu tanah air, satu bangsa, dan menjunjung bahasa persatuan: Indonesia. Ikrar ini menjadi penanda penting tumbuhnya persatuan nasional.</p>
-          </article>
+          {materials.map((material) => (
+            <MaterialCard key={material.index} {...material} />
+          ))}
         </div>
       </section>
       <section className="ebook-section" id="ebook">
@@ -146,6 +163,7 @@ export default function Home() {
       </div>
       <footer className="site-footer">
         <span>Jejak Bangsa · Belajar sejarah dengan ringkas</span>
+        <span>Foto: <a href="https://commons.wikimedia.org/wiki/File:COLLECTIE_TROPENMUSEUM_Leerlingen_van_de_School_tot_Opleiding_van_Indische_Artsen_(STOVIA)_Doctor_Jawa_TMnr_60047128.jpg" target="_blank" rel="noreferrer">STOVIA</a> (Wereldmuseum Amsterdam, domain publik) · <a href="https://commons.wikimedia.org/wiki/File:Oprichtingsvergadering_van_de_afdeling_van_de_Sarekat_Islam_te_Blitar.jpg" target="_blank" rel="noreferrer">Sarekat Islam Blitar</a> &amp; <a href="https://commons.wikimedia.org/wiki/File:Historical_Indonesian_Youth_Pledge,_Sumpah_Pemuda_in_1928.jpg" target="_blank" rel="noreferrer">Poetoesan Congres 1928</a> (Wikimedia Commons, CC BY 4.0)</span>
         <span>Rujukan: <a href="https://kebudayaan.kemdikbud.go.id/Vredeburg/diorama-kongres-pertama-boedi-oetomo-diorama-museum-benteng-vredeburg-yogyakarta/" target="_blank" rel="noreferrer">Budi Utomo</a> · <a href="https://kebudayaan.kemdikbud.go.id/Vredeburg/diorama-berdirinya-tamansiswa-diorama-museum-benteng-vredeburg-yogyakarta/" target="_blank" rel="noreferrer">Taman Siswa</a> · <a href="https://kebudayaan.kemdikbud.go.id/kisah-dibalik-lahirnya-lagu-kebangsaan-indonesia-raya/" target="_blank" rel="noreferrer">Kongres Pemuda II</a></span>
       </footer>
     </main>

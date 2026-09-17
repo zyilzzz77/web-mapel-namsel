@@ -33,9 +33,19 @@ app/
   icon.svg                       favicon
   components/
     WordTypewriter.tsx           animasi judul per kata (framer-motion)
+    MaterialCard.tsx             kartu materi dengan gambar
 public/
+  images/                        foto historis untuk kartu materi
   pergerakan-nasional-1900-1928.pdf   e-book
 ```
+
+## Sumber gambar
+
+| Berkas | Sumber | Lisensi |
+| --- | --- | --- |
+| `public/images/kesadaran-baru.jpg` | [STOVIA, Wereldmuseum Amsterdam](https://commons.wikimedia.org/wiki/File:COLLECTIE_TROPENMUSEUM_Leerlingen_van_de_School_tot_Opleiding_van_Indische_Artsen_(STOVIA)_Doctor_Jawa_TMnr_60047128.jpg) | Domain publik |
+| `public/images/bergerak-bersama.jpg` | [Rapat Sarekat Islam Blitar](https://commons.wikimedia.org/wiki/File:Oprichtingsvergadering_van_de_afdeling_van_de_Sarekat_Islam_te_Blitar.jpg) | CC BY 4.0 |
+| `public/images/sumpah-pemuda.jpg` | [Poetoesan Congres Pemoeda-Pemoeda Indonesia 1928](https://commons.wikimedia.org/wiki/File:Historical_Indonesian_Youth_Pledge,_Sumpah_Pemuda_in_1928.jpg) | CC BY 4.0 |
 
 ## Deploy ke Vercel
 
