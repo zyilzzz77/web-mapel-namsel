@@ -59,13 +59,49 @@ export default function Home() {
     <main className="site-shell">
       <header className="topbar">
         <div className="brand-mark"><span aria-hidden="true">✦</span> Jejak Bangsa</div>
-        <span className="topbar-label">Kuis sejarah Indonesia</span>
+        <nav className="topbar-nav" aria-label="Navigasi utama"><a href="#materi">Materi</a><a href="#ebook">E-book</a><a href="#kuis">Kuis</a></nav>
       </header>
-      <div className="page-grid">
+      <section className="learning-section" id="materi">
+        <div className="learning-heading">
+          <p className="eyebrow">MATERI SINGKAT · 1900–1928</p>
+          <h1>Dari organisasi<br/>menuju <em>persatuan.</em></h1>
+          <p>Pada awal abad ke-20, perjuangan bangsa Indonesia semakin terorganisasi. Pendidikan melahirkan kaum terpelajar, sementara pengalaman hidup di bawah penjajahan mendorong keinginan untuk memperbaiki nasib bersama.</p>
+        </div>
+        <div className="material-grid">
+          <article className="material-card">
+            <span>01 / LATAR BELAKANG</span>
+            <h2>Kesadaran baru</h2>
+            <p>Perlawanan di berbagai daerah telah berlangsung lama, tetapi sering bergerak sendiri-sendiri. Pada masa Politik Etis, sebagian rakyat mendapat kesempatan belajar. Mereka mulai memakai pendidikan, pers, dan organisasi untuk menyuarakan perubahan. Gagasan nasionalisme dari luar negeri juga ikut memberi pengaruh.</p>
+          </article>
+          <article className="material-card">
+            <span>02 / ORGANISASI</span>
+            <h2>Bergerak bersama</h2>
+            <p>Budi Utomo berdiri pada 1908 dan menjadi tonggak Kebangkitan Nasional. Sesudahnya, Sarekat Islam berkembang dari gerakan perdagangan; Indische Partij menyuarakan persatuan dan kemerdekaan; Muhammadiyah serta Taman Siswa memperluas pendidikan. Perhimpunan Indonesia dan PNI juga mempertegas cita-cita kebangsaan.</p>
+          </article>
+          <article className="material-card">
+            <span>03 / PUNCAK PERSATUAN</span>
+            <h2>Sumpah Pemuda</h2>
+            <p>Organisasi pemuda dari berbagai daerah mulai mencari titik temu sebagai satu bangsa. Dalam Kongres Pemuda II pada 28 Oktober 1928, mereka menegaskan satu tanah air, satu bangsa, dan menjunjung bahasa persatuan: Indonesia. Ikrar ini menjadi penanda penting tumbuhnya persatuan nasional.</p>
+          </article>
+        </div>
+      </section>
+      <section className="ebook-section" id="ebook">
+        <div className="ebook-info">
+          <p className="eyebrow">BACA LEBIH LENGKAP</p>
+          <h2>E-book Pergerakan Nasional Indonesia</h2>
+          <p>Buku 15 halaman ini membahas latar belakang pergerakan, organisasi dan tokohnya, peran pemuda dan perempuan, hingga Sumpah Pemuda 1928.</p>
+          <div className="ebook-actions">
+            <a className="ebook-button" href="/pergerakan-nasional-1900-1928.pdf" target="_blank" rel="noreferrer">Buka e-book <span aria-hidden="true">↗</span></a>
+            <a className="ebook-download" href="/pergerakan-nasional-1900-1928.pdf" download="Pergerakan Nasional Indonesia (1900-1928).pdf">Unduh PDF</a>
+          </div>
+        </div>
+        <div className="ebook-preview"><iframe src="/pergerakan-nasional-1900-1928.pdf#page=1&view=FitH" title="Pratinjau e-book Pergerakan Nasional Indonesia 1900 sampai 1928" loading="lazy" /></div>
+      </section>
+      <div className="page-grid" id="kuis">
         <aside className="intro-panel">
           <p className="eyebrow">1900 — 1928</p>
           <h1>Pergerakan<br/><em>Nasional</em><br/>Indonesia</h1>
-          <p className="intro-copy">Kenali organisasi, tokoh, dan peristiwa yang menumbuhkan semangat persatuan. Jawab 10 soal singkat dan lihat penjelasannya satu per satu.</p>
+          <p className="intro-copy">Sudah membaca materinya? Jawab 10 soal singkat tentang organisasi, tokoh, dan Sumpah Pemuda. Penjelasan muncul setelah setiap jawaban.</p>
           <div className="milestones" aria-label="Garis waktu singkat">
             <div><strong>1908</strong><span>Budi Utomo</span></div>
             <div><strong>1912</strong><span>Organisasi berkembang</span></div>
