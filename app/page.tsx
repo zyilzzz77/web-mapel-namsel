@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import WordTypewriter from "@/app/components/WordTypewriter";
 
 type Question = {
   year: string;
@@ -64,7 +65,7 @@ export default function Home() {
       <section className="learning-section" id="materi">
         <div className="learning-heading">
           <p className="eyebrow">MATERI SINGKAT · 1900–1928</p>
-          <h1>Dari organisasi<br/>menuju <em>persatuan.</em></h1>
+          <h1><WordTypewriter segments={[{ text: "Dari organisasi\n" }, { text: "menuju " }, { text: "persatuan.", accent: true }]} /></h1>
           <p>Pada awal abad ke-20, perjuangan bangsa Indonesia semakin terorganisasi. Pendidikan melahirkan kaum terpelajar, sementara pengalaman hidup di bawah penjajahan mendorong keinginan untuk memperbaiki nasib bersama.</p>
         </div>
         <div className="material-grid">
@@ -100,7 +101,7 @@ export default function Home() {
       <div className="page-grid" id="kuis">
         <aside className="intro-panel">
           <p className="eyebrow">1900 — 1928</p>
-          <h1>Pergerakan<br/><em>Nasional</em><br/>Indonesia</h1>
+          <h1><WordTypewriter segments={[{ text: "Pergerakan\n" }, { text: "Nasional\n", accent: true }, { text: "Indonesia" }]} /></h1>
           <p className="intro-copy">Sudah membaca materinya? Jawab 10 soal singkat tentang organisasi, tokoh, dan Sumpah Pemuda. Penjelasan muncul setelah setiap jawaban.</p>
           <div className="milestones" aria-label="Garis waktu singkat">
             <div><strong>1908</strong><span>Budi Utomo</span></div>
