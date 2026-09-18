@@ -1,7 +1,7 @@
 # Jejak Bangsa
 
-Situs pembelajaran sejarah **Pergerakan Nasional Indonesia 1900–1928** — materi ringkas, e-book PDF,
-dan kuis 10 soal, dari Budi Utomo hingga Sumpah Pemuda.
+Situs pembelajaran sejarah **Pergerakan Nasional Indonesia 1900–1928** — materi ringkas, video pilihan,
+e-book PDF, dan kuis 10 soal, dari Budi Utomo hingga Sumpah Pemuda.
 
 Dibuat dengan [Next.js](https://nextjs.org) (App Router), React 19, TypeScript, dan Tailwind CSS v4.
 
@@ -28,16 +28,29 @@ Buka [http://localhost:3000](http://localhost:3000).
 ```
 app/
   layout.tsx                     layout root + metadata
-  page.tsx                       halaman materi, e-book, dan kuis
+  page.tsx                       halaman materi, video, e-book, dan kuis
   globals.css                    gaya global (Tailwind v4 + custom CSS)
   icon.svg                       favicon
   components/
     WordTypewriter.tsx           animasi judul per kata (framer-motion)
     MaterialCard.tsx             kartu materi dengan gambar
+    VideoMaterials.tsx           kartu video YouTube (thumbnail → iframe saat diklik)
 public/
   images/                        foto historis untuk kartu materi
   pergerakan-nasional-1900-1928.pdf   e-book
 ```
+
+## Sumber video
+
+| Kartu | Video | Kanal |
+| --- | --- | --- |
+| 01 / Latar belakang | [Politik Etis dan Lahirnya Kesadaran Nasionalisme Pemuda Indonesia](https://www.youtube.com/watch?v=EdUY3Bc6c2E) | Portal Sekolah |
+| 02 / Organisasi | [Sejarah Kebangkitan Nasional Indonesia (1908–1928)](https://www.youtube.com/watch?v=pi0p_wGmuFY) | Anjangsana Sejarah |
+| 03 / Puncak persatuan | [Sejarah Singkat Kongres Pemuda II dan Lahirnya Sumpah Pemuda 1928](https://www.youtube.com/watch?v=H2qblSsqSNY) | NuFleck |
+
+Video dimuat secara *lazy*: yang tampil pertama hanya thumbnail dari `i.ytimg.com`, iframe YouTube
+baru dimuat setelah pengunjung menekan tombol putar. Domain thumbnail didaftarkan di
+`next.config.ts` (`images.remotePatterns`).
 
 ## Sumber gambar
 

@@ -1,5 +1,6 @@
 import WordTypewriter from "@/app/components/WordTypewriter";
 import MaterialCard from "@/app/components/MaterialCard";
+import VideoMaterials, { type VideoMaterial } from "@/app/components/VideoMaterials";
 import BookFlip from "@/app/components/BookFlip";
 import QuizGame, { type QuizQuestion } from "@/app/components/QuizGame";
 
@@ -31,6 +32,30 @@ const materials = [
   },
 ];
 
+const videos: VideoMaterial[] = [
+  {
+    id: "EdUY3Bc6c2E",
+    topic: "01 / LATAR BELAKANG",
+    title: "Politik Etis dan Lahirnya Kesadaran Nasionalisme Pemuda Indonesia",
+    channel: "Portal Sekolah",
+    description: "Bagaimana kebijakan Politik Etis membuka akses pendidikan dan melahirkan generasi terpelajar yang mulai menyuarakan perubahan.",
+  },
+  {
+    id: "pi0p_wGmuFY",
+    topic: "02 / ORGANISASI",
+    title: "Sejarah Kebangkitan Nasional Indonesia (1908–1928)",
+    channel: "Anjangsana Sejarah",
+    description: "Perjalanan organisasi pergerakan dari Budi Utomo, Sarekat Islam, dan Indische Partij hingga tumbuhnya kesadaran kebangsaan.",
+  },
+  {
+    id: "H2qblSsqSNY",
+    topic: "03 / PUNCAK PERSATUAN",
+    title: "Sejarah Singkat Kongres Pemuda II dan Lahirnya Sumpah Pemuda 1928",
+    channel: "NuFleck",
+    description: "Suasana Kongres Pemuda II dan lahirnya ikrar satu tanah air, satu bangsa, serta satu bahasa persatuan: Indonesia.",
+  },
+];
+
 const questions: QuizQuestion[] = [
   { year: "1901", topic: "Politik Etis", question: "Program Politik Etis yang ikut membuka jalan bagi lahirnya kaum terpelajar adalah …", options: ["Monopoli dagang", "Pendidikan", "Kerja paksa", "Tanam paksa"], answer: 1, explanation: "Pendidikan memberi kesempatan bagi sebagian penduduk bumiputra untuk belajar. Dari kalangan terpelajar ini tumbuh banyak gagasan pergerakan." },
   { year: "1908", topic: "Budi Utomo", question: "Organisasi apa yang berdiri pada 20 Mei 1908 dan diperingati sebagai tonggak Kebangkitan Nasional?", options: ["Budi Utomo", "Sarekat Islam", "Indische Partij", "PNI"], answer: 0, explanation: "Budi Utomo lahir pada 20 Mei 1908 melalui para pelajar STOVIA. Tanggal ini kemudian diperingati sebagai Hari Kebangkitan Nasional." },
@@ -49,7 +74,7 @@ export default function Home() {
     <main className="site-shell">
       <header className="topbar">
         <div className="brand-mark"><span aria-hidden="true">✦</span> Jejak Bangsa</div>
-        <nav className="topbar-nav" aria-label="Navigasi utama"><a href="#materi">Materi</a><a href="#ebook">E-book</a><a href="#kuis">Kuis</a></nav>
+        <nav className="topbar-nav" aria-label="Navigasi utama"><a href="#materi">Materi</a><a href="#video">Video</a><a href="#ebook">E-book</a><a href="#kuis">Kuis</a></nav>
       </header>
       <section className="learning-section" id="materi">
         <div className="learning-heading">
@@ -62,6 +87,14 @@ export default function Home() {
             <MaterialCard key={material.index} {...material} />
           ))}
         </div>
+      </section>
+      <section className="video-section" id="video">
+        <div className="video-heading">
+          <p className="eyebrow">VIDEO MATERI</p>
+          <h2>Tonton penjelasan lebih detail</h2>
+          <p>Tiga video pilihan yang mendampingi tiap bagian materi — dari kebijakan Politik Etis, organisasi pergerakan, hingga lahirnya Sumpah Pemuda 1928. Klik untuk memutar.</p>
+        </div>
+        <VideoMaterials videos={videos} />
       </section>
       <section className="ebook-section" id="ebook">
         <div className="ebook-info">
